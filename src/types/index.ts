@@ -6,7 +6,7 @@ export interface Deployments {
     };
 }
 
-export interface TokenItem {
+export interface NFTInfo {
     id: string;
     name: string;
     ticker: string;
@@ -14,4 +14,14 @@ export interface TokenItem {
     imageUrl: string;
     createdBy: string;
     marketCap: string;
-} 
+}
+
+export interface ProposalInfo {
+    id: string;
+    name: string;
+    ticker: string;
+    description: string;
+    imageUrl: string;
+    createdBy: string;
+    marketCap: string;
+}

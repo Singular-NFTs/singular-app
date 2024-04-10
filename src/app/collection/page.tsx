@@ -1,4 +1,4 @@
-import TokenList from '@app/components/TokenList'
+import CollectionList from '@app/components/CollectionList'
 
 import { COLLECTION_TITLE } from '@app/constants'
 
@@ -11,7 +11,7 @@ export default function CollectionPage() {
                 {COLLECTION_TITLE}
             </h1>
             <div className={`space-y-${SPACE_Y}`}>
-                <TokenList />
+                <CollectionList />
             </div>
         </div>
     )
