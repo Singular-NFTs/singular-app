@@ -7,13 +7,13 @@ import './globals.css'
 import Web3Provider from '@app/web3/provider';
 import Main from '@app/components/Main';
 import NavBar from '@app/components/NavBar';
-import { TITLE, DESCRIPTION } from '@app/constants';
+import { APP_NAME, APP_DESCRIPTION } from '@app/constants';
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: TITLE,
-  description: DESCRIPTION,
+  title: APP_NAME,
+  description: APP_DESCRIPTION,
 }
 
 interface RootLayoutProps {
