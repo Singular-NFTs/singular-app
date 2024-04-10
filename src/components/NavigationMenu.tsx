@@ -10,7 +10,10 @@ interface NavItem {
 }
 
 const navigation: NavItem[] = [
-    { name: 'Explore', href: '/' }
+    { name: "About", href: '/about' },
+    { name: 'Collection', href: '/collection' },
+    { name: 'Proposals', href: '/proposals' },
+    { name: 'Docs', href: '/docs' }
 ];
 
 interface NavLinkProps extends NavItem {

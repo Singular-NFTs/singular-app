@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Logo from './Logo';
 import NavigationMenu from './NavigationMenu';
@@ -10,11 +11,12 @@ export default function NavBar() {
 
                 {/* Logo and NavigationMenu together on the left */}
                 <div className="flex items-center">
-                    <Logo />
+                    <Link href="/">
+                        <Logo />
+                    </Link>
                     <NavigationMenu className="ml-6 hidden sm:flex sm:space-x-8" />
                 </div>
 
-                {/* ConnectButton on the right */}
                 <ConnectButton />
 
                 {/* Mobile menu (if you have a toggle button for it, place it here) */}
