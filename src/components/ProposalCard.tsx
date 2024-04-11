@@ -15,7 +15,7 @@ export default function ProposalCard({ info }: ProposalInfoProps) {
             </div>
 
             <Image
-                className="flex-shrink-0 rounded-full"
+                className="mx-auto flex-shrink-0 rounded-full"
                 src={info.imageUrl}
                 alt={`${info.name} logo`}
                 width={128}

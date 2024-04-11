@@ -1,13 +1,15 @@
-import { UNDER_CONSTRUCTION } from '@app/constants'
-
-const SPACE_Y = 6;
+import Image from 'next/image'
 
 export default function DocsPage() {
     return (
-        <div className={`py-10 space-y-${SPACE_Y}`}>
-            <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">
-                {UNDER_CONSTRUCTION}
-            </h1>
+        <div className={`py-10 flex items-center justify-center`}>
+            <Image
+                src="/under-construction.png" // Ensure the image path is correct
+                alt="Under Construction"
+                width={450} // Set your desired width
+                height={450} // Set your desired height
+                objectFit="contain" // Adjusts the size of the image within its container
+            />
         </div>
     )
 }
