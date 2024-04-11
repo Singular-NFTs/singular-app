@@ -46,6 +46,9 @@ dependencies:
     version: 2.5.19(@tanstack/react-query@5.29.0)(@types/react@18.2.75)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)(typescript@5.4.4)(viem@2.9.15)
 
 devDependencies:
+  '@types/formidable':
+    specifier: ^3.4.5
+    version: 3.4.5
   '@types/node':
     specifier: ^20
     version: 20.12.7
@@ -3325,6 +3328,12 @@ packages:
   /@types/filewriter@0.0.33:
     resolution: {integrity: sha512-xFU8ZXTw4gd358lb2jw25nxY9QAgqn2+bKKjKOYfNCzN4DKCFetK7sPtrlpg66Ywe3vWY9FNxprZawAh9wfJ3g==}
     dev: false
+
+  /@types/formidable@3.4.5:
+    resolution: {integrity: sha512-s7YPsNVfnsng5L8sKnG/Gbb2tiwwJTY1conOkJzTMRvJAlLFW1nEua+ADsJQu8N1c0oTHx9+d5nqg10WuT9gHQ==}
+    dependencies:
+      '@types/node': 20.12.7
+    dev: true
 
   /@types/har-format@1.2.15:
     resolution: {integrity: sha512-RpQH4rXLuvTXKR0zqHq3go0RVXYv/YVqv4TnPH95VbwUxZdQlK1EtcMvQvMpDngHbt13Csh9Z4qT9AbkiQH5BA==}

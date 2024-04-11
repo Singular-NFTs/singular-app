@@ -47,7 +47,7 @@ const config = getDefaultConfig({
         [mainnet.id]: http(`https://eth-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || ""}`),
         [sepolia.id]: http(`https://eth-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || ""}`),
         [base.id]: http(`https://eth-base.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || ""}`),
-        [baseSepolia.id]: http(`https://base-sepolia.g.alchemy.com/v2/JmXSjhNebn2v_jTEgLoqKyf4q_H8EwIn`),
+        [baseSepolia.id]: http(`https://base-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || ""}`),
     },
 });
 

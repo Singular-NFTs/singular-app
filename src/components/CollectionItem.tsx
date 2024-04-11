@@ -14,11 +14,12 @@ export default function CollectionItem({ info }: NFTInfoProps) {
             </div>
 
             <Image
-                className="mx-auto h-32 w-32 flex-shrink-0 rounded-full"
+                className="mx-auto flex-shrink-0 rounded-full"
                 src={info.imageUrl}
                 alt={`${info.name} logo`}
                 width={128}
                 height={128}
+                priority={true}
             />
 
             <div className="flex-1 p-8">
