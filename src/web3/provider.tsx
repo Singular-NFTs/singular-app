@@ -22,19 +22,42 @@ import {
 } from '@rainbow-me/rainbowkit/wallets';
 
 import { RainbowKitProvider, getDefaultConfig, getDefaultWallets } from '@rainbow-me/rainbowkit';
+import { APP_NAME } from '@app/constants';
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID || "";
-const APP_NAME = "MemeCoiner";
 
 const { wallets } = getDefaultWallets();
 
-const localChainId = process.env.NEXT_PUBLIC_CHAIN_ID ? parseInt(process.env.NEXT_PUBLIC_CHAIN_ID) : 1337;
-const localhostConfigured = { ...localhost, ...{ id: localChainId } };
+const localChainId = process.env.NEXT_PUBLIC_LOCAL_CHAIN_ID ? parseInt(process.env.NEXT_PUBLIC_LOCAL_CHAIN_ID, 10) : 1337;  // Un valor predeterminado.
+const localhostConfigured = { ...localhost, id: localChainId };
+
+const activeNetworks = process.env.NEXT_PUBLIC_ACTIVE_NETWORKS ? process.env.NEXT_PUBLIC_ACTIVE_NETWORKS.split('|') : ['mainnet'];  // default to mainnet if not specified
+
+interface NetworkConfigurations {
+    [key: string]: any;  // Due to lack of proper type from Wagmi
+}
+
+const networkConfigurations: NetworkConfigurations = {
+    mainnet: mainnet,
+    base: base,
+    mode: mode,
+    sepolia: sepolia,
+    baseSepolia: baseSepolia,
+    modeTestnet: modeTestnet,
+    localhost: localhostConfigured
+};
+
+const configuredChains = activeNetworks.map(network => {
+    if (network in networkConfigurations) {
+        return networkConfigurations[network];
+    }
+    throw new Error(`Network ${network} is not supported`);
+}).filter(Boolean);
 
 const config = getDefaultConfig({
     appName: APP_NAME,
     projectId: PROJECT_ID,
-    chains: [mainnet, base, mode, ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [sepolia, baseSepolia, modeTestnet, localhostConfigured] : [])],
+    chains: configuredChains as any, // Due to lack of proper type from Wagmi
     ssr: true,
     wallets: [
         ...wallets,
