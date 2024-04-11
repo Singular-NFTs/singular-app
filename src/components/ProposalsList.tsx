@@ -9,7 +9,7 @@ import { DeploymentValue, ProposalInfo } from '@app/types';
 import { ABI } from '@app/web3/abis/TokenFactory'
 import ADDRESS from '@app/web3/deployments/84532/TokenFactory.json'
 
-import TokenItemCard from './CollectionItem';
+import ProposalCard from './ProposalCard';
 
 export default function ProposalsList() {
     const [proposals, setProposals] = useState<ProposalInfo[]>([]);
@@ -41,7 +41,7 @@ export default function ProposalsList() {
             {isLoading && <li>Loading...</li>}
 
             {!isLoading && proposals && proposals.map((proposal, index) => (
-                <TokenItemCard
+                <ProposalCard
                     key={index}
                     info={proposal}
                 />

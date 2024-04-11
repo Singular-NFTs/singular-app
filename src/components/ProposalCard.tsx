@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import { ProposalInfo } from '@app/types';
+import { formatAddress } from '@app/utils';
 
 interface ProposalInfoProps {
     info: ProposalInfo;
@@ -24,7 +25,7 @@ export default function ProposalCard({ info }: ProposalInfoProps) {
             <div className="flex-1 p-8">
                 <dl>
                     <dt className="sr-only">Created By</dt>
-                    <dd className="text-sm text-gray-500">Created by: {info.createdBy}</dd>
+                    <dd className="text-sm text-gray-500">Created by: {formatAddress(info.createdBy)}</dd>
                     <dt className="sr-only">Market Cap</dt>
                     <dd className="mt-2 text-sm text-gray-500">Market Cap: ${info.marketCap ? info.marketCap.toLocaleString() : 'N/A'}</dd>
                 </dl>
