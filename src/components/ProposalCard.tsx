@@ -20,6 +20,7 @@ export default function ProposalCard({ info }: ProposalInfoProps) {
                 alt={`${info.name} logo`}
                 width={128}
                 height={128}
+                priority={true}
             />
 
             <div className="flex-1 p-8">

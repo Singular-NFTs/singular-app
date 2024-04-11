@@ -16,7 +16,7 @@ export default function ProposalDialog({ isOpen, setOpen }: ProposalDialogProps)
     const [cid, setCid] = useState(""); // esto tampoco lo uso, puede ser eliminado
     const [uploading, setUploading] = useState(false); // TODO: Set image loading
 
-    const inputFile = useRef(null);
+    const inputFile = useRef<HTMLInputElement>(null);
 
     const uploadFile = async (fileToUpload: File) => {
         try {
@@ -92,30 +92,31 @@ export default function ProposalDialog({ isOpen, setOpen }: ProposalDialogProps)
                                     <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
                                         Create a Proposal
                                     </Dialog.Title>
-                                    <div className="mt-2 col-span-full">
-                                        <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                                            <div className="text-center">
-                                                <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
-                                                <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                                    <label
-                                                        htmlFor="file-upload"
-                                                        className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                                                    >
-                                                        <span>Upload a file</span>
-                                                        <input
-                                                            type="file"
-                                                            id="file"
-                                                            ref={inputFile}
-                                                            onChange={handleFileChange}
-                                                            style={{ display: "none" }}
-                                                        />
-                                                    </label>
-                                                    <p className="pl-1">or drag and drop</p>
-                                                </div>
-                                                <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                    <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                        <div className="text-center">
+                                            <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
+                                            <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                                <button
+                                                    type="button"
+                                                    disabled={uploading}
+                                                    onClick={() => inputFile.current && inputFile.current.click()}
+                                                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 hover:text-indigo-500 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
+                                                >
+                                                    {uploading ? 'Uploading...' : 'Upload a file'}
+                                                </button>
+                                                <input
+                                                    type="file"
+                                                    id="file-upload"
+                                                    ref={inputFile}
+                                                    onChange={handleFileChange}
+                                                    style={{ display: "none" }}
+                                                />
+                                                <p className="pl-1">or drag and drop</p>
                                             </div>
+                                            <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
                                         </div>
                                     </div>
+
                                 </div>
                                 <div className="mt-5 sm:mt-6">
                                     <button
