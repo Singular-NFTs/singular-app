@@ -1,5 +1,4 @@
 import { Fragment, useRef, useState } from 'react';
-
 import { Dialog, Transition } from '@headlessui/react'
 import { PhotoIcon } from '@heroicons/react/16/solid';
 
@@ -10,11 +9,12 @@ interface ProposalDialogProps {
     setOpen: (value: boolean) => void;
 }
 
+const GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL || '';
+
 export default function ProposalDialog({ isOpen, setOpen }: ProposalDialogProps) {
-    const [imageError, setImageError] = useState<string | null>(null); // TODO: Como manejar errores de imagen
-    const [file, setFile] = useState<File | undefined>(undefined); // Realmente no se usa, asi que podria ser eliminado
-    const [cid, setCid] = useState(""); // esto tampoco lo uso, puede ser eliminado
-    const [uploading, setUploading] = useState(false); // TODO: Set image loading
+    const [imageError, setImageError] = useState<string | null>(null);
+    const [cid, setCid] = useState("");
+    const [uploading, setUploading] = useState(false);
 
     const inputFile = useRef<HTMLInputElement>(null);
 
@@ -57,7 +57,6 @@ export default function ProposalDialog({ isOpen, setOpen }: ProposalDialogProps)
             return;
         }
 
-        setFile(e.target.files[0]);
         uploadFile(e.target.files[0]);
     };
 
@@ -93,37 +92,28 @@ export default function ProposalDialog({ isOpen, setOpen }: ProposalDialogProps)
                                         Create a Proposal
                                     </Dialog.Title>
                                     <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                                        <div className="text-center">
-                                            <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
-                                            <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                                <button
-                                                    type="button"
-                                                    disabled={uploading}
-                                                    onClick={() => inputFile.current && inputFile.current.click()}
-                                                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 hover:text-indigo-500 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
-                                                >
-                                                    {uploading ? 'Uploading...' : 'Upload a file'}
-                                                </button>
-                                                <input
-                                                    type="file"
-                                                    id="file-upload"
-                                                    ref={inputFile}
-                                                    onChange={handleFileChange}
-                                                    style={{ display: "none" }}
-                                                />
-                                                <p className="pl-1">or drag and drop</p>
-                                            </div>
-                                            <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                                        </div>
+                                        {!uploading && !cid && <UploadImageControl uploading={uploading} inputFile={inputFile} handleFileChange={handleFileChange} />}
+
+                                        {uploading && <div className="loader">Loading...</div>}
+
+                                        {cid && !uploading && (
+                                            <img
+                                                src={`${GATEWAY_URL}/ipfs/${cid}`}
+                                                alt="Uploaded Image"
+                                            />
+                                        )}
+                                        {imageError && (
+                                            <div className="mt-2 text-red-500 text-xs font-semibold">{imageError}</div>
+                                        )}
                                     </div>
 
                                 </div>
                                 <div className="mt-5 sm:mt-6">
                                     <button
                                         type="button"
+                                        disabled={uploading || !cid}
                                         className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                        onClick={() => setOpen(false)}
-                                    >
+                                        onClick={() => setOpen(false)}>
                                         Create
                                     </button>
                                 </div>
@@ -133,5 +123,37 @@ export default function ProposalDialog({ isOpen, setOpen }: ProposalDialogProps)
                 </div>
             </Dialog>
         </Transition.Root>
+    )
+}
+
+interface UploadImageControlProps {
+    uploading: boolean;
+    inputFile: React.RefObject<HTMLInputElement>;
+    handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const UploadImageControl = ({ uploading, inputFile, handleFileChange }: UploadImageControlProps) => {
+    return (
+        <div className="text-center">
+            <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
+            <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                <button
+                    type="button"
+                    disabled={uploading}
+                    onClick={() => inputFile.current && inputFile.current.click()}
+                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus:outline-none hover:text-indigo-500 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed">
+                    {uploading ? 'Uploading...' : 'Upload a file'}
+                </button>
+                <input
+                    type="file"
+                    id="file-upload"
+                    ref={inputFile}
+                    onChange={handleFileChange}
+                    style={{ display: "none" }}
+                />
+                <p className="pl-1">or drag and drop</p>
+            </div>
+            <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+        </div>
     )
 }
