@@ -8,8 +8,8 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'gray-lucky-louse-813.mypinata.cloud',
                 port: '',
-                pathname: '/ipfs/**/*.webp',
-            },
+                pathname: '/ipfs/**',
+            }
         ]
     },
     webpack: config => {
