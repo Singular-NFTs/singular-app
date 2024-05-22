@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import { PhotoIcon } from '@heroicons/react/16/solid';
 
@@ -60,6 +60,28 @@ export default function ProposalDialog({ isOpen, setOpen }: ProposalDialogProps)
         uploadFile(e.target.files[0]);
     };
 
+    useEffect(() => {
+        let timeoutId: NodeJS.Timeout;
+
+        if (!isOpen) {
+            timeoutId = setTimeout(() => {
+                setCid("");
+                setImageError(null);
+                setUploading(false);
+            }, 300);
+        }
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [isOpen]);
+
+    const handleCreate = () => {
+        console.log('Create proposal');
+    }
+
+    const containerClasses = "mt-2 flex justify-center items-center rounded-lg border border-dashed border-gray-900/25 px-2 py-2 h-64 w-full";
+
     return (
         <Transition.Root show={isOpen} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -91,19 +113,28 @@ export default function ProposalDialog({ isOpen, setOpen }: ProposalDialogProps)
                                     <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
                                         Create a Proposal
                                     </Dialog.Title>
-                                    <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                                        {!uploading && !cid && <UploadImageControl uploading={uploading} inputFile={inputFile} handleFileChange={handleFileChange} />}
+                                    <div className={containerClasses}>
+                                        {uploading && <Spinner />}
+                                        {!uploading && cid && (
+                                            <div className="flex flex-col items-center">
+                                                <img
+                                                    src={`${GATEWAY_URL}/ipfs/${cid}`}
+                                                    alt="Uploaded Image"
+                                                    className="object-contain h-48 w-full"
+                                                />
+                                                <button
+                                                    onClick={() => setCid('')}
+                                                    className="mt-2 text-sm text-red-500 hover:text-red-600">
+                                                    Replace Image
+                                                </button>
+                                            </div>
 
-                                        {uploading && <div className="loader">Loading...</div>}
-
-                                        {cid && !uploading && (
-                                            <img
-                                                src={`${GATEWAY_URL}/ipfs/${cid}`}
-                                                alt="Uploaded Image"
-                                            />
+                                        )}
+                                        {!uploading && !cid && (
+                                            <UploadImageControl uploading={uploading} inputFile={inputFile} handleFileChange={handleFileChange} />
                                         )}
                                         {imageError && (
-                                            <div className="mt-2 text-red-500 text-xs font-semibold">{imageError}</div>
+                                            <div className="absolute bottom-0 text-red-500 text-xs font-semibold">{imageError}</div>
                                         )}
                                     </div>
 
@@ -112,10 +143,11 @@ export default function ProposalDialog({ isOpen, setOpen }: ProposalDialogProps)
                                     <button
                                         type="button"
                                         disabled={uploading || !cid}
-                                        className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                        onClick={() => setOpen(false)}>
+                                        className="inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-75 disabled:cursor-not-allowed disabled:bg-indigo-400 hover:bg-indigo-500 bg-indigo-600 text-white"
+                                        onClick={handleCreate}>
                                         Create
                                     </button>
+
                                 </div>
                             </Dialog.Panel>
                         </Transition.Child>
@@ -125,6 +157,16 @@ export default function ProposalDialog({ isOpen, setOpen }: ProposalDialogProps)
         </Transition.Root>
     )
 }
+
+const Spinner = () => (
+    <div className="flex items-center justify-center">
+        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span className="px-2 visually-hidden"> Uploading...</span>
+    </div>
+);
 
 interface UploadImageControlProps {
     uploading: boolean;
@@ -157,3 +199,11 @@ const UploadImageControl = ({ uploading, inputFile, handleFileChange }: UploadIm
         </div>
     )
 }
+
+{/* <button type="button" className="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150 cursor-not-allowed" disabled="">
+    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    Processing...
+</button> */}
